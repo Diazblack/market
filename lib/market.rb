@@ -22,4 +22,17 @@ class Market
       vendor.inventory.has_key?(item)
     end
   end
+
+  def sorted_item_list
+    list = []
+    @vendors.each do |vendor|
+      vendor.inventory.each_key do |key|
+        if !(list.include?(key))
+          list << key
+        end
+      end
+    end
+    list.sort
+  end
+
 end
