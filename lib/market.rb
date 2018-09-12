@@ -45,4 +45,37 @@ class Market
     hash
   end
 
+  def sell(item, amount)
+    vendors_with_item = vendors_that_sell(item)
+    sum = sum_of_item(item, vendors_with_item)
+    if vendors_with_item == []
+      false
+    elsif sum < amount
+      false
+    else
+      sustract_from_vendor(sum, vendors_with_item, amount)
+    end
+  end
+
+  def sum_of_item(item, vendors_with_item)
+    vendors_with_item.sum do |vendor|
+      vendor.inventory[item]
+    end
+  end
+
+  def sustract_from_vendor(sum, vendors_with_item, amount)
+    vendors_with_item.each do |vendor|
+      vendor.inventory.each_pair do |item, quantity|
+        if sum > quantity
+          sum -= quantity
+          vendor.inventory[item] -= quantity
+        elsif amount == sum
+          vendor.inventory[item] -= amount
+        else
+          vendor.inventory[item] -= sum
+        end
+      end
+    end
+  end
+
 end
